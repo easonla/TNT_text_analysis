@@ -2,6 +2,7 @@ import urllib
 import json
 import requests
 import pandas as pd
+import sys
 TNTAPI = str("https://api.nationaltreasure.tw/v1/upload")
 
 class TNT_Api:
@@ -37,10 +38,14 @@ class TNT_Api:
         print ('downloading, {:d} to go'.format(self.n))
         docs = {}
         for indx, uid in enumerate(self.uid_list):
-            link = TNTAPI + '?uid=' +uid
-            docs[uid] = requests.get(link).json()['Item']
-            if indx%100 == 0: print ("{:d} data downloaded".format(indx))
-            elif indx > self.n: break
+            try:
+                link = TNTAPI + '?uid=' +uid
+                docs[uid] = requests.get(link).json()['Item']
+                if indx%100 == 0: print ("{:d} data downloaded".format(indx))
+                elif indx > self.n: break
+            except:
+                print ('error:',sys.exc_info()[0])
+                pass
         self.df_docs = pd.DataFrame.from_dict(docs,orient='index')
 
     def find_ocr_data(self):
