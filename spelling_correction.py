@@ -31,7 +31,7 @@ def correction(word):
 
 def candidates(word): 
     "Generate possible spelling corrections for word."
-    return (known([word]) or known(edits1(word)) or known(edits2(word)) or [word])
+    return (known([word]) or known(edits1(word)) or known(edits2(word)) or [word] or chkr.suggest(word))
 
 def known(words): 
     "The subset of `words` that appear in the dictionary of WORDS."
